@@ -1,15 +1,15 @@
 import React from 'react';
 import './BuddyCard.css';
 
-function BuddyCard({ name, game, price }) {
+const BuddyCard = ({ name, game, price, onHireClick }) => {
   return (
     <div className="buddy-card">
       <h3>{name}</h3>
       <p>Game: {game}</p>
-  <p>Price per hour: ${price}</p>
-  <button>Hire {name}</button>
-</div>
-);
-}
+      <p>Price: ${price}</p>
+      <button onClick={onHireClick}>Hire Me</button>
+    </div>
+  );
+};
 
 export default BuddyCard;
