@@ -1,13 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Checkout.css';
 
-function Checkout({ cart }) {
-  const totalPrice = cart
-    ? cart.reduce((total, item) => total + Number(item.price), 0).toFixed(2)
-    : 0;
-
+function Checkout() {
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const { cart } = location.state || { cart: [] };
+
+  const totalPrice = cart
+  ? cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
+  : 0;
+
 
   const handlePlaceOrder = () => {
     alert('Order placed successfully!');
@@ -18,7 +22,6 @@ function Checkout({ cart }) {
     <div className="checkout-container">
       <h2 className="checkout-title">Checkout</h2>
       <div className="checkout-content">
-        {/* Payment Information */}
         <div className="checkout-section">
           <h3 className="checkout-section-title">Payment Information</h3>
           <form>
@@ -41,15 +44,33 @@ function Checkout({ cart }) {
           </form>
         </div>
 
-        {/* Order Summary */}
         <div className="checkout-section">
-          <h3 className="checkout-section-title">Order Summary</h3>
-          {/* ... Order Summary table */}
-          <p className="checkout-total">Total Price: ${totalPrice}</p>
-        </div>
+  <h3 className="checkout-section-title">Order Summary</h3>
+  <table className="order-summary-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {cart.map((item) => (
+        <tr key={item.name}>
+          <td>{item.name}</td>
+          <td>{item.quantity}</td>
+          <td>${item.price}</td>
+          <td>${(item.quantity * item.price).toFixed(2)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <p className="checkout-total">Total Price: ${totalPrice}</p>
+</div>
+
       </div>
 
-      {/* Place Order button */}
       <div className="checkout-actions">
         <button className="checkout-cancel" onClick={() => navigate('/marketplace')}>
           Cancel

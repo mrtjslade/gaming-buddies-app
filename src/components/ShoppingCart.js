@@ -3,11 +3,7 @@ import { FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './ShoppingCart.css';
 
-function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick }) {
-  const totalPrice = cart
-    ? cart.reduce((total, item) => total + Number(item.price), 0).toFixed(2)
-    : 0;
-
+function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick, onQuantityChange }) {
   const navigate = useNavigate();
 
   const handleRemoveClick = (item) => {
@@ -18,10 +14,24 @@ function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick }) {
     onRemoveAllClick();
   };
 
+  const handleQuantityChange = (item, quantity) => {
+    // Notifying the parent component about the quantity change
+    // You can implement the logic to update the quantity in the parent component
+    // For example, you can update the quantity in the cart state
+    // and recalculate the total price
+    // You can also update the item quantity directly in the cart state
+    // based on your data structure
+
+    // Example: Updating the quantity in the parent component
+    onQuantityChange(item, quantity);
+  };
+
   const handleCheckout = () => {
-    // Perform any checkout logic here
-    // For example, you can navigate to a checkout page
-    navigate('/checkout');
+    navigate('/checkout', { state: { cart } });
+  };
+
+  const calculateTotalPrice = () => {
+    return cart.reduce((total, item) => total + Number(item.price) * item.quantity, 0).toFixed(2);
   };
 
   return (
@@ -34,6 +44,7 @@ function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick }) {
               <tr>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Quantity</th>
                 <th></th>
               </tr>
             </thead>
@@ -43,10 +54,15 @@ function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick }) {
                   <td>{item.name}</td>
                   <td>${item.price}</td>
                   <td>
-                    <button
-                      onClick={() => handleRemoveClick(item)}
-                      className="remove-button"
-                    >
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      min={1}
+                      onChange={(e) => handleQuantityChange(item, e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <button onClick={() => handleRemoveClick(item)} className="remove-button">
                       <FaTrash />
                     </button>
                   </td>
@@ -54,7 +70,7 @@ function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick }) {
               ))}
             </tbody>
           </table>
-          <p className="cart-total">Total Price: ${totalPrice}</p>
+          <p className="cart-total">Total Price: ${calculateTotalPrice()}</p>
           <div className="cart-buttons">
             <button className="checkout-btn" onClick={handleCheckout}>
               Checkout
