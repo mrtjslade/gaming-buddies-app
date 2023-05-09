@@ -1,66 +1,99 @@
 .marketplace-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.marketplace-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
+.marketplace-title-container {
+  width: 80%;
   background-color: #f2f2f2;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+  text-align: center;
+  align-items: center;
 }
 
-.marketplace-title {
-  margin: 0;
-}
-
-.buddy-list {
+.marketplace-content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
+  justify-content: space-between;
 }
 
-.buddy-card {
+.filter-column {
+  width: 20%;
+}
+
+.buddies-column {
+  width: 50%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
-  background-color: #fff;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: black;
   border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  margin: 10px;
 }
 
-.buddy-card-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
+.cart-column {
+  width: 20%;
 }
 
-.buddy-card-content {
-  padding: 20px;
-}
-
-.buddy-card-name {
+.marketplace-description {
   font-size: 1.2rem;
-  font-weight: bold;
-  margin: 0 0 10px 0;
+  margin-bottom: 20px;
 }
 
-.buddy-card-game {
-  margin: 0;
+/* Media Queries */
+
+@media screen and (max-width: 1024px) {
+  .marketplace-title-container {
+    width: 90%;
+  }
+
+  .marketplace-content {
+    width: 90%;
+  }
+
+  .filter-column {
+    width: 20%;
+  }
+  
+  .buddies-column {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .cart-column {
+    width: 25%;
+  }
 }
 
-.buddy-card-price {
-  font-weight: bold;
-  margin-top: 10px;
-}
+@media screen and (max-width: 900px) {
+  .marketplace-container {
+    align-items: center;
+  }
 
-.buddy-card-button {
-  margin-top: 10px;
+  .marketplace-title-container,
+  .marketplace-content {
+    width: 98%;
+  }
+
+  .filter-column {
+    width: 100%;
+    margin: 0 auto 20px auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .buddies-column {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .cart-column {
+    width: 100%;
+  }
 }
