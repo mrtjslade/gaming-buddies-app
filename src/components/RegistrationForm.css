@@ -59,3 +59,11 @@ input:focus {
 .form-content h2 {
   margin-bottom: 1rem;
 }
+
+.form-error {
+  color: red;
+}
+
+.error-input {
+  border-color: red;
+}

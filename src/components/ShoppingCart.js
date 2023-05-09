@@ -15,14 +15,6 @@ function ShoppingCart({ cart, onRemoveClick, onRemoveAllClick, onQuantityChange 
   };
 
   const handleQuantityChange = (item, quantity) => {
-    // Notifying the parent component about the quantity change
-    // You can implement the logic to update the quantity in the parent component
-    // For example, you can update the quantity in the cart state
-    // and recalculate the total price
-    // You can also update the item quantity directly in the cart state
-    // based on your data structure
-
-    // Example: Updating the quantity in the parent component
     onQuantityChange(item, quantity);
   };
 

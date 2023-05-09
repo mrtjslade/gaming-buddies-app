@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, fetchSignInMethodsForEmail } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import './RegistrationForm.css';
@@ -8,20 +8,34 @@ function RegistrationForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate(); // Access the navigate function
+  const [formError, setFormError] = useState('');
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log('Register button clicked');
+
+    // Check if any fields are empty
+    if (!email || !password || !confirmPassword) {
+      setFormError('Please fill in all fields.');
+      return;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setFormError('Passwords do not match.');
+      return;
+    }
 
     try {
-      if (password !== confirmPassword) {
-        throw new Error('Passwords do not match');
+      const emailExists = await checkIfEmailExists(email);
+      if (emailExists) {
+        setFormError('Email already exists. Please go to the login page.');
+        return;
       }
 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      // Additional logic after successful registration (e.g., update user profile)
 
       console.log('Registration successful:', user);
 
@@ -29,7 +43,18 @@ function RegistrationForm() {
       navigate('/marketplace');
     } catch (error) {
       console.log('Registration error:', error);
-      // Handle registration error (e.g., show error message to the user)
+      setFormError('Email already exists, please login.');
+    }
+  };
+
+  const checkIfEmailExists = async (email) => {
+    try {
+      const authInstance = getAuth(auth);
+      const methods = await fetchSignInMethodsForEmail(authInstance, email);
+      return methods.length > 0;
+    } catch (error) {
+      console.log('Email existence check error:', error);
+      return false;
     }
   };
 
@@ -38,29 +63,7 @@ function RegistrationForm() {
       <div className="form-content">
         <h2>Create an Account</h2>
         <form onSubmit={handleRegister}>
-          {/* Commented out first name and last name fields */}
-          {/* <div className="form-group">
-            <label htmlFor="firstName">First Name:</label>
-            <input
-              type="text"
-              name="firstName"
-              id="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="lastName">Last Name:</label>
-            <input
-              type="text"
-              name="lastName"
-              id="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div> */}
-
-          <div className="form-group">
+          <div className={`form-group${formError ? ' error' : ''}`}>
             <label htmlFor="email">Email:</label>
             <input
               type="email"
@@ -68,9 +71,11 @@ function RegistrationForm() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className={formError ? 'error-input' : ''}
             />
           </div>
-          <div className="form-group">
+  
+          <div className={`form-group${formError ? ' error' : ''}`}>
             <label htmlFor="password">Password:</label>
             <input
               type="password"
@@ -78,9 +83,11 @@ function RegistrationForm() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className={formError ? 'error-input' : ''}
             />
           </div>
-          <div className="form-group">
+  
+          <div className={`form-group${formError ? ' error' : ''}`}>
             <label htmlFor="confirmPassword">Confirm Password:</label>
             <input
               type="password"
@@ -88,24 +95,17 @@ function RegistrationForm() {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              className={formError ? 'error-input' : ''}
             />
+            {formError && <p className="form-error">{formError}</p>}
           </div>
-          {/* Commented out birthday field */}
-          {/* <div className="form-group">
-            <label htmlFor="birthday">Birthday:</label>
-            <input
-              type="date"
-              name="birthday"
-              id="birthday"
-              value={birthday}
-              onChange={(e) => setBirthday(e.target.value)}
-            />
-          </div> */}
+  
           <button type="submit" className="form-button">Create Account</button>
         </form>
       </div>
     </div>
   );
+  
 }
 
 export default RegistrationForm;
