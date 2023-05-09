@@ -7,6 +7,7 @@ import './LoginForm.css';
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -22,6 +23,7 @@ function LoginForm() {
       navigate('/marketplace');
     } catch (error) {
       console.log('Login error:', error);
+      setLoginError('Incorrect email or password.');
     }
   };
 
@@ -35,6 +37,7 @@ function LoginForm() {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className={loginError && 'error'}
           />
         </label>
         <label>
@@ -44,8 +47,10 @@ function LoginForm() {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className={loginError && 'error'}
           />
         </label>
+        {loginError && <p className="error-message">{loginError}</p>}
         <button type="submit">Login</button>
       </form>
     </div>

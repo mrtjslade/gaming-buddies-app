@@ -2,6 +2,10 @@ import React from 'react';
 import './Filter.css';
 
 const Filter = ({ filterGame, onChange }) => {
+  const handleFilterGameChange = (event) => {
+    onChange(event.target.value);
+  };
+
   return (
     <div className="filter-container">
       <h3 className="filter-title">Filter by game:</h3>
@@ -9,7 +13,7 @@ const Filter = ({ filterGame, onChange }) => {
         id="game-filter"
         className="filter-select"
         value={filterGame}
-        onChange={onChange}
+        onChange={handleFilterGameChange}
       >
         <option value="">All</option>
         <option value="Fortnite">Fortnite</option>
@@ -22,3 +26,4 @@ const Filter = ({ filterGame, onChange }) => {
 };
 
 export default Filter;
+

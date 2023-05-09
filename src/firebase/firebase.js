@@ -51,16 +51,23 @@ const useAuth = () => {
 const addBuddiesToFirestore = async (buddies) => {
   try {
     const buddiesCollectionRef = collection(firestore, 'buddies');
+    const buddiesSnapshot = await getDocs(buddiesCollectionRef);
 
-    for (const buddy of buddies) {
-      await addDoc(buddiesCollectionRef, buddy);
+    if (buddiesSnapshot.empty) {
+      // Only add buddies if the collection is empty
+      for (const buddy of buddies) {
+        await addDoc(buddiesCollectionRef, buddy);
+      }
+
+      console.log('Buddies added to Firestore successfully!');
+    } else {
+      console.log('Buddies collection already exists in Firestore.');
     }
-
-    console.log('Buddies added to Firestore successfully!');
   } catch (error) {
     console.error('Error adding buddies to Firestore:', error);
   }
 };
+
 
 // Function to fetch buddies from Firestore collection
 const getBuddiesFromFirestore = async () => {
