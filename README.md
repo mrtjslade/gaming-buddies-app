@@ -1,6 +1,6 @@
 # Gaming Guides App
 
-Gaming Guides App is a project aimed at providing gaming guides and resources for gamers.
+Gaming Guides App is a project aimed at providing gaming guides and resources for gamers.  Live site: https://abc7893.sg-host.com/
 
 ## Getting Started
 
